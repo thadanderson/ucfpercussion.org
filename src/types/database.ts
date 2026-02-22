@@ -2,6 +2,8 @@
  * TypeScript types matching supabase/schema.sql exactly.
  * Replace with `supabase gen types typescript --project-id <id>` output
  * once the Supabase project has live data to introspect.
+ *
+ * Every table requires `Relationships: []` to satisfy @supabase/postgrest-js GenericTable.
  */
 
 export interface Database {
@@ -25,6 +27,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["users"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       students: {
@@ -47,6 +50,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["students"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       faculty: {
@@ -69,6 +73,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["faculty"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       lessons: {
@@ -91,6 +96,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["lessons"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       juries: {
@@ -113,6 +119,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["juries"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       events: {
@@ -137,6 +144,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["events"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       posts: {
@@ -161,6 +169,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["posts"]["Insert"], "id">>;
+        Relationships: [];
       };
 
       music_library: {
@@ -185,10 +194,17 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["music_library"]["Insert"], "id">>;
+        Relationships: [];
       };
     };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
-    Enums: Record<string, never>;
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
   };
 }

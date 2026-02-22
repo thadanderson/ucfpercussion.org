@@ -1,0 +1,96 @@
+import { notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { updateLibraryEntry } from "@/app/admin/library/actions";
+import type { Database } from "@/types/database";
+
+type LibraryRow = Database["public"]["Tables"]["music_library"]["Row"];
+
+export const metadata = { title: "Edit Library Entry" };
+
+export default async function EditLibraryPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { id } = await params;
+  const { error } = await searchParams;
+  const supabase = await createClient();
+
+  const { data } = await supabase.from("music_library").select("*").eq("id", id).single();
+  const entry = data as LibraryRow | null;
+  if (!entry) notFound();
+
+  return (
+    <div className="max-w-xl">
+      <h1 className="text-2xl font-bold text-ucf-black mb-6">Edit Library Entry</h1>
+
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
+          {decodeURIComponent(error)}
+        </div>
+      )}
+
+      <form action={updateLibraryEntry} className="space-y-4">
+        <input type="hidden" name="id" value={entry.id} />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+          <input
+            name="title"
+            required
+            defaultValue={entry.title}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Composer</label>
+          <input
+            name="composer"
+            defaultValue={entry.composer ?? ""}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Arranger</label>
+          <input
+            name="arranger"
+            defaultValue={entry.arranger ?? ""}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Instrumentation</label>
+          <input
+            name="instrumentation"
+            defaultValue={entry.instrumentation ?? ""}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <input
+            name="location"
+            defaultValue={entry.location ?? ""}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+          <textarea
+            name="notes"
+            rows={3}
+            defaultValue={entry.notes ?? ""}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-ucf-gold text-ucf-black font-semibold px-6 py-2 rounded hover:opacity-90 transition-opacity text-sm"
+        >
+          Save Changes
+        </button>
+      </form>
+    </div>
+  );
+}
