@@ -44,8 +44,8 @@ export default async function AboutPage() {
         <p>
           Visit the official{" "}
           <a href="https://cah.ucf.edu/performingarts/studio/percussion/" className="text-ucf-gold hover:underline" target="_blank" rel="noopener noreferrer">Percussion Studio</a>
-          {" "}page on the School of{" "}
-          <a href="https://cah.ucf.edu/performingarts/" className="text-ucf-gold hover:underline" target="_blank" rel="noopener noreferrer">Performing Arts</a>
+          {" "}page on the{" "}
+          <a href="https://cah.ucf.edu/performingarts/" className="text-ucf-gold hover:underline" target="_blank" rel="noopener noreferrer">School of Performing Arts</a>
           {" "}website.
         </p>
 
