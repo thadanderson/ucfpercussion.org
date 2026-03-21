@@ -68,6 +68,65 @@ export async function deleteEvent(formData: FormData) {
   redirect("/admin/events");
 }
 
+export async function createNewsletterDraft(formData: FormData) {
+  const id = formData.get("id") as string;
+  const supabase = await createClient();
+  const { data: event } = await supabase.from("events").select("*").eq("id", id).single();
+
+  if (!event) {
+    redirect(`/admin/events?error=${encodeURIComponent("Event not found.")}`);
+  }
+
+  const apiKey = process.env.BUTTONDOWN_API_KEY;
+  if (!apiKey) {
+    redirect(`/admin/events?error=${encodeURIComponent("BUTTONDOWN_API_KEY is not set.")}`);
+  }
+
+  const fmt = new Intl.DateTimeFormat("en-US", {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone: "America/New_York",
+  });
+
+  const dateStr = fmt.format(new Date(event.starts_at));
+  const endsStr = event.ends_at ? ` – ${fmt.format(new Date(event.ends_at))}` : "";
+  const locationStr = event.location ? `\n**Location:** ${event.location}` : "";
+  const description = event.description
+    ? event.description.replace(/<[^>]+>/g, "").trim()
+    : "";
+
+  const body = `## ${event.title}
+
+**When:** ${dateStr}${endsStr}${locationStr}
+
+${description}
+
+[View on UCF Percussion →](${process.env.NEXT_PUBLIC_SITE_URL ?? "https://ucfpercussion.com"}/events)
+`;
+
+  const res = await fetch("https://api.buttondown.email/v1/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Token ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      subject: event.title,
+      body,
+      status: "draft",
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    redirect(`/admin/events?error=${encodeURIComponent(err?.detail ?? "Failed to create draft.")}`);
+  }
+
+  const draft = await res.json();
+  const draftUrl = `https://buttondown.com/emails/${draft.id}`;
+  redirect(`/admin/events?newsletter=${encodeURIComponent(draftUrl)}`);
+}
+
 export async function toggleEventPublished(formData: FormData) {
   const supabase = await createClient();
   const id = formData.get("id") as string;

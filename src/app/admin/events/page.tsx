@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import DeleteButton from "@/components/admin/DeleteButton";
-import { deleteEvent, toggleEventPublished } from "@/app/admin/events/actions";
+import { deleteEvent, toggleEventPublished, createNewsletterDraft } from "@/app/admin/events/actions";
 
 export const metadata = { title: "Admin — Events" };
 
@@ -10,9 +10,9 @@ const fmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "
 export default async function AdminEventsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; newsletter?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, newsletter } = await searchParams;
   const supabase = await createClient();
   const { data: events } = await supabase
     .from("events")
@@ -34,6 +34,20 @@ export default async function AdminEventsPage({
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
           {decodeURIComponent(error)}
+        </div>
+      )}
+
+      {newsletter && (
+        <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded text-sm">
+          Newsletter draft created.{" "}
+          <a
+            href={decodeURIComponent(newsletter)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold underline hover:opacity-80"
+          >
+            Open in Buttondown →
+          </a>
         </div>
       )}
 
@@ -81,6 +95,15 @@ export default async function AdminEventsPage({
                       >
                         Edit
                       </Link>
+                      <form action={createNewsletterDraft} className="inline">
+                        <input type="hidden" name="id" value={event.id} />
+                        <button
+                          type="submit"
+                          className="text-blue-600 hover:underline text-sm font-medium"
+                        >
+                          Newsletter
+                        </button>
+                      </form>
                       <DeleteButton action={deleteEvent} id={event.id} />
                     </div>
                   </td>

@@ -18,7 +18,7 @@ export default function NavMenu({ isLoggedIn }: { isLoggedIn: boolean }) {
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-6 text-sm">
           <li><Link href="/about">About</Link></li>
-          <li><Link href="/events">Events</Link></li>
+          <li><Link href="/events">News &amp; Events</Link></li>
           <li><Link href="/auditions">Auditions</Link></li>
           <li><Link href="/alumni">Alumni</Link></li>
           <li><Link href="/contact">Contact</Link></li>
@@ -59,7 +59,7 @@ export default function NavMenu({ isLoggedIn }: { isLoggedIn: boolean }) {
         <div className="md:hidden absolute top-full left-0 right-0 bg-ucf-black border-t border-white/10 px-6 py-4">
           <ul className="flex flex-col gap-4 text-sm">
             <li><Link href="/about" onClick={close}>About</Link></li>
-            <li><Link href="/events" onClick={close}>Events</Link></li>
+            <li><Link href="/events" onClick={close}>News &amp; Events</Link></li>
             <li><Link href="/auditions" onClick={close}>Auditions</Link></li>
             <li><Link href="/alumni" onClick={close}>Alumni</Link></li>
             <li><Link href="/contact" onClick={close}>Contact</Link></li>

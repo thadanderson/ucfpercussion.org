@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import EventCard from "@/components/ui/EventCard";
+import NewsletterSubscribe from "@/components/ui/NewsletterSubscribe";
 import type { Database } from "@/types/database";
 
 type EventRow = Database["public"]["Tables"]["events"]["Row"];
@@ -41,6 +42,8 @@ export default async function EventsPage() {
           View Past Events →
         </Link>
       </div>
+
+      <NewsletterSubscribe />
     </div>
   );
 }
