@@ -6,7 +6,7 @@ export default function ContactPage() {
       <h1 className="text-4xl font-bold text-ucf-white mb-4">Contact Us</h1>
       <p className="text-ucf-white mb-10 leading-relaxed">
         We&apos;d love to hear from you. Reach out with questions about auditions, lessons,
-        performances, or anything else related to the UCF Percussion.
+        performances, or anything else related to the UCF Percussion Studio.
       </p>
 
       <div className="space-y-6">
