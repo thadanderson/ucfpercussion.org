@@ -56,21 +56,27 @@ export interface Database {
       faculty: {
         Row: {
           id: string;
-          user_id: string;
+          user_id: string | null;
           first_name: string;
           last_name: string;
           title: string | null;
           bio: string | null;
+          headshot_url: string | null;
+          published: boolean;
           created_at: string;
+          updated_at: string;
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id?: string | null;
           first_name: string;
           last_name: string;
           title?: string | null;
           bio?: string | null;
+          headshot_url?: string | null;
+          published?: boolean;
           created_at?: string;
+          updated_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["faculty"]["Insert"], "id">>;
         Relationships: [];

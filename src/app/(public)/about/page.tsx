@@ -1,6 +1,23 @@
+import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/types/database";
+
+type FacultyRow = Database["public"]["Tables"]["faculty"]["Row"];
+
 export const metadata = { title: "About" };
 
-export default function AboutPage() {
+function getInitials(firstName: string, lastName: string) {
+  return `${firstName[0]}${lastName[0]}`.toUpperCase();
+}
+
+export default async function AboutPage() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("faculty")
+    .select("*")
+    .eq("published", true)
+    .order("last_name", { ascending: true });
+  const faculty = data as FacultyRow[] | null;
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
       <h1 className="text-4xl font-bold text-ucf-white mb-4">About the Studio</h1>
@@ -27,6 +44,45 @@ export default function AboutPage() {
           and leaders in the field. Whether your path leads to the concert stage, the classroom, or
           both, the UCF Percussion Studio gives you the foundation to pursue it with confidence.
         </p>
+
+        {/* Faculty */}
+        {faculty && faculty.length > 0 && (
+          <>
+            <h2 className="text-2xl font-bold text-ucf-white mt-10">Faculty</h2>
+            <div className="grid gap-6 sm:grid-cols-2 not-prose mt-4">
+              {faculty.map((member) => (
+                <div
+                  key={member.id}
+                  className="border border-white/20 rounded-lg p-6 flex gap-4"
+                >
+                  {member.headshot_url ? (
+                    <img
+                      src={member.headshot_url}
+                      alt={`${member.first_name} ${member.last_name}`}
+                      className="w-20 h-20 rounded-full object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full bg-ucf-gold flex items-center justify-center text-ucf-black font-bold text-2xl shrink-0">
+                      {getInitials(member.first_name, member.last_name)}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-ucf-white font-semibold text-lg">
+                      {member.first_name} {member.last_name}
+                    </p>
+                    {member.title && (
+                      <p className="text-ucf-gold text-sm mt-0.5">{member.title}</p>
+                    )}
+                    {member.bio && (
+                      <p className="text-gray-300 text-sm mt-2 leading-relaxed">{member.bio}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
         <h2 className="text-2xl font-bold text-ucf-white mt-10">Ensembles</h2>
         <p>
           Percussion majors have the opportunity to perform in a wide variety of chamber and large

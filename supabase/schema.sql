@@ -61,13 +61,16 @@ CREATE POLICY "student_read_own" ON public.students
 -- 3. faculty
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.faculty (
-  id          uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id     uuid        NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
-  first_name  text        NOT NULL,
-  last_name   text        NOT NULL,
-  title       text,
-  bio         text,
-  created_at  timestamptz NOT NULL DEFAULT now()
+  id           uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id      uuid        REFERENCES public.users(id) ON DELETE SET NULL,
+  first_name   text        NOT NULL,
+  last_name    text        NOT NULL,
+  title        text,
+  bio          text,
+  headshot_url text,
+  published    boolean     NOT NULL DEFAULT false,
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  updated_at   timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS faculty_user_id_idx ON public.faculty(user_id);
@@ -83,6 +86,11 @@ CREATE POLICY "admin_all_faculty" ON public.faculty
 CREATE POLICY "auth_read_faculty" ON public.faculty
   FOR SELECT
   USING (auth.role() = 'authenticated');
+
+-- Anonymous: read published faculty rows
+CREATE POLICY "anon_read_published_faculty" ON public.faculty
+  FOR SELECT
+  USING (published = true);
 
 -- ============================================================
 -- 4. lessons
