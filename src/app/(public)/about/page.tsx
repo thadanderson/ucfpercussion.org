@@ -1,13 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
+import FacultyCard from "@/components/ui/FacultyCard";
 import type { Database } from "@/types/database";
 
 type FacultyRow = Database["public"]["Tables"]["faculty"]["Row"];
 
 export const metadata = { title: "About" };
-
-function getInitials(firstName: string, lastName: string) {
-  return `${firstName[0]}${lastName[0]}`.toUpperCase();
-}
 
 export default async function AboutPage() {
   const supabase = await createClient();
@@ -49,35 +46,9 @@ export default async function AboutPage() {
         {faculty && faculty.length > 0 && (
           <>
             <h2 className="text-2xl font-bold text-ucf-white mt-10">Faculty</h2>
-            <div className="grid gap-6 sm:grid-cols-2 not-prose mt-4">
+            <div className="grid gap-6 md:grid-cols-3 not-prose mt-4">
               {faculty.map((member) => (
-                <div
-                  key={member.id}
-                  className="border border-white/20 rounded-lg p-6 flex gap-4"
-                >
-                  {member.headshot_url ? (
-                    <img
-                      src={member.headshot_url}
-                      alt={`${member.first_name} ${member.last_name}`}
-                      className="w-20 h-20 rounded-full object-cover shrink-0"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-full bg-ucf-gold flex items-center justify-center text-ucf-black font-bold text-2xl shrink-0">
-                      {getInitials(member.first_name, member.last_name)}
-                    </div>
-                  )}
-                  <div>
-                    <p className="text-ucf-white font-semibold text-lg">
-                      {member.first_name} {member.last_name}
-                    </p>
-                    {member.title && (
-                      <p className="text-ucf-gold text-sm mt-0.5">{member.title}</p>
-                    )}
-                    {member.bio && (
-                      <p className="text-gray-300 text-sm mt-2 leading-relaxed">{member.bio}</p>
-                    )}
-                  </div>
-                </div>
+                <FacultyCard key={member.id} member={member} />
               ))}
             </div>
           </>

@@ -82,18 +82,6 @@ export default async function EditFacultyPage({
           <ImageUpload name="headshot_url" bucket="faculty-images" defaultValue={member.headshot_url} />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Linked User ID (optional)
-          </label>
-          <input
-            name="user_id"
-            defaultValue={member.user_id ?? ""}
-            placeholder="UUID from users table"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ucf-gold"
-          />
-        </div>
-
         <button
           type="submit"
           className="bg-ucf-gold text-ucf-black font-semibold px-6 py-2 rounded hover:opacity-90 transition-opacity text-sm"

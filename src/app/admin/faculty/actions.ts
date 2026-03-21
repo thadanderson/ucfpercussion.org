@@ -12,7 +12,6 @@ export async function createFacultyMember(formData: FormData) {
     title: (formData.get("title") as string) || null,
     bio: (formData.get("bio") as string) || null,
     headshot_url: (formData.get("headshot_url") as string) || null,
-    user_id: (formData.get("user_id") as string) || null,
   });
 
   if (error) {
@@ -32,7 +31,6 @@ export async function updateFacultyMember(formData: FormData) {
     title: (formData.get("title") as string) || null,
     bio: (formData.get("bio") as string) || null,
     headshot_url: (formData.get("headshot_url") as string) || null,
-    user_id: (formData.get("user_id") as string) || null,
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
