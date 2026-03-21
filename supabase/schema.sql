@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS public.alumni (
   last_name           text        NOT NULL,
   graduation_year     integer,
   degree              text,
-  current_role        text,
+  "current_role"      text,
   current_institution text,
   grad_school         text,
   bio                 text,

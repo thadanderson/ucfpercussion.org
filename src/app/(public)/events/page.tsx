@@ -6,7 +6,7 @@ import type { Database } from "@/types/database";
 
 type EventRow = Database["public"]["Tables"]["events"]["Row"];
 
-export const metadata = { title: "Events" };
+export const metadata = { title: "News & Events" };
 
 export default async function EventsPage() {
   const supabase = await createClient();
@@ -22,17 +22,21 @@ export default async function EventsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
-      <h1 className="text-4xl font-bold text-ucf-white mb-10">Upcoming Events</h1>
+      <h1 className="text-4xl font-bold text-ucf-white mb-10">News &amp; Events</h1>
 
-      {!events || events.length === 0 ? (
-        <p className="text-ucf-white">No upcoming events at this time. Check back soon.</p>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2">
-          {events.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </div>
-      )}
+      <NewsletterSubscribe />
+
+      <div className="mt-16">
+        {!events || events.length === 0 ? (
+          <p className="text-ucf-white">No upcoming events at this time. Check back soon.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2">
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="mt-16 pt-8 border-t border-white/20">
         <Link
@@ -42,8 +46,6 @@ export default async function EventsPage() {
           View Past Events →
         </Link>
       </div>
-
-      <NewsletterSubscribe />
     </div>
   );
 }
