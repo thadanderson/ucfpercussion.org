@@ -185,6 +185,9 @@ Every table in `src/types/database.ts` **must** include `Relationships: []`. The
 ### Post slugs
 Auto-derived from title on every create/update using `slugify()` in `admin/news/actions.ts`. The `posts.slug` column has a UNIQUE constraint — duplicate slugs redirect with an error message.
 
+### Dark mode / color scheme
+The site is locked to dark mode. `globals.css` sets `color-scheme: dark` on `:root` so the browser never flips to a light theme regardless of the visitor's system preference. All page backgrounds and text colors are set explicitly via UCF brand utilities (`bg-ucf-black`, `text-ucf-white`, etc.).
+
 ## Deployment
 
 - **Platform:** Vercel (connected to GitHub `main` branch — auto-deploys on push)
@@ -221,4 +224,5 @@ Build must pass with **zero TypeScript errors**. Current route count: **35 route
 | 4.5 | UI polish: hero image, gold accents, mobile nav, rich text, image upload, alumni, timezone fix | ✅ Complete |
 | 4.6 | Faculty CRUD + About page display, Buttondown newsletter, footer, CSV alumni import | ✅ Complete |
 | 4.7 | Deployed to Vercel with custom domain | ✅ Complete |
+| 4.8 | Audition page content update, dark mode locked site-wide | ✅ Complete |
 | 5 | Student/faculty dashboard + admin lesson/jury scheduling | Pending |
