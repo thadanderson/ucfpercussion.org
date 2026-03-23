@@ -138,6 +138,7 @@ export interface Database {
           ends_at: string | null;
           image_url: string | null;
           published: boolean;
+          pinned: boolean;
           created_at: string;
         };
         Insert: {
@@ -149,6 +150,7 @@ export interface Database {
           ends_at?: string | null;
           image_url?: string | null;
           published?: boolean; // DEFAULT false
+          pinned?: boolean; // DEFAULT false
           created_at?: string;
         };
         Update: Partial<Omit<Database["public"]["Tables"]["events"]["Insert"], "id">>;

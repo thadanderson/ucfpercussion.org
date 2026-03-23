@@ -127,6 +127,20 @@ ${description}
   redirect(`/admin/events?newsletter=${encodeURIComponent(draftUrl)}`);
 }
 
+export async function toggleEventPinned(formData: FormData) {
+  const supabase = await createClient();
+  const id = formData.get("id") as string;
+  const pinned = formData.get("pinned") === "true";
+
+  const { error } = await supabase.from("events").update({ pinned: !pinned }).eq("id", id);
+
+  if (error) {
+    redirect(`/admin/events?error=${encodeURIComponent(error.message)}`);
+  }
+
+  redirect("/admin/events");
+}
+
 export async function toggleEventPublished(formData: FormData) {
   const supabase = await createClient();
   const id = formData.get("id") as string;

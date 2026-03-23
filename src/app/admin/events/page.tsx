@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import DeleteButton from "@/components/admin/DeleteButton";
-import { deleteEvent, toggleEventPublished, createNewsletterDraft } from "@/app/admin/events/actions";
+import { deleteEvent, toggleEventPublished, toggleEventPinned, createNewsletterDraft } from "@/app/admin/events/actions";
 
 export const metadata = { title: "Admin — Events" };
 
@@ -17,7 +17,7 @@ export default async function AdminEventsPage({
   const { data: events } = await supabase
     .from("events")
     .select("*")
-    .order("starts_at", { ascending: false });
+    .order("starts_at", { ascending: true });
 
   return (
     <div>
@@ -62,6 +62,7 @@ export default async function AdminEventsPage({
                 <th className="text-left px-4 py-3 font-medium text-gray-700">Starts At</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-700">Location</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-700">Status</th>
+                <th className="text-center px-4 py-3 font-medium text-gray-700">Pinned</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-700">Actions</th>
               </tr>
             </thead>
@@ -84,6 +85,21 @@ export default async function AdminEventsPage({
                         }`}
                       >
                         {event.published ? "Published" : "Draft"}
+                      </button>
+                    </form>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <form action={toggleEventPinned}>
+                      <input type="hidden" name="id" value={event.id} />
+                      <input type="hidden" name="pinned" value={String(event.pinned)} />
+                      <button
+                        type="submit"
+                        title={event.pinned ? "Unpin from homepage" : "Pin to homepage"}
+                        className={`text-lg leading-none transition-opacity ${
+                          event.pinned ? "opacity-100" : "opacity-25 hover:opacity-60"
+                        }`}
+                      >
+                        📌
                       </button>
                     </form>
                   </td>

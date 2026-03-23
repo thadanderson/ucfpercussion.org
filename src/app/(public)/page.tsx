@@ -12,14 +12,27 @@ export default async function HomePage() {
 
   const now = new Date().toISOString();
 
-  const { data: eventsData } = await supabase
+  // Show pinned events if any exist; otherwise show next 3 upcoming
+  const { data: pinnedData } = await supabase
     .from("events")
     .select("*")
     .eq("published", true)
+    .eq("pinned", true)
     .gte("starts_at", now)
-    .order("starts_at", { ascending: true })
-    .limit(3);
-  const events = eventsData as EventRow[] | null;
+    .order("starts_at", { ascending: true });
+
+  let events: EventRow[] | null = pinnedData as EventRow[] | null;
+
+  if (!events || events.length === 0) {
+    const { data: upcomingData } = await supabase
+      .from("events")
+      .select("*")
+      .eq("published", true)
+      .gte("starts_at", now)
+      .order("starts_at", { ascending: true })
+      .limit(3);
+    events = upcomingData as EventRow[] | null;
+  }
 
   return (
     <div>

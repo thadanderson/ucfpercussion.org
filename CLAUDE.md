@@ -185,6 +185,12 @@ Every table in `src/types/database.ts` **must** include `Relationships: []`. The
 ### Post slugs
 Auto-derived from title on every create/update using `slugify()` in `admin/news/actions.ts`. The `posts.slug` column has a UNIQUE constraint — duplicate slugs redirect with an error message.
 
+### Event detail pages
+Each event has its own page at `/events/[id]`. `EventCard` is a compact horizontal row (date block, title/time/location, thumbnail) that links to the detail page. The `past` route (`/events/past`) takes precedence over `[id]` in Next.js App Router routing.
+
+### Pinned events
+Events have a `pinned boolean DEFAULT false` column. The homepage shows pinned upcoming events when any exist; falls back to the next 3 upcoming if none are pinned. Admins toggle pinning via a 📌 button in the admin events table (`toggleEventPinned` action in `admin/events/actions.ts`).
+
 ### Dark mode / color scheme
 The site is locked to dark mode. `globals.css` sets `color-scheme: dark` on `:root` so the browser never flips to a light theme regardless of the visitor's system preference. All page backgrounds and text colors are set explicitly via UCF brand utilities (`bg-ucf-black`, `text-ucf-white`, etc.).
 
@@ -225,4 +231,5 @@ Build must pass with **zero TypeScript errors**. Current route count: **35 route
 | 4.6 | Faculty CRUD + About page display, Buttondown newsletter, footer, CSV alumni import | ✅ Complete |
 | 4.7 | Deployed to Vercel with custom domain | ✅ Complete |
 | 4.8 | Audition page content update, dark mode locked site-wide | ✅ Complete |
+| 4.9 | Event detail pages, compact horizontal event cards, pinned events on homepage | ✅ Complete |
 | 5 | Student/faculty dashboard + admin lesson/jury scheduling | Pending |
