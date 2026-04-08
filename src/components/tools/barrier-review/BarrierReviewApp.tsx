@@ -9,6 +9,7 @@ import SideMenu from "./SideMenu";
 import LandingPage from "./LandingPage";
 import FilterMenu from "./FilterMenu";
 import ProfessorComment from "./ProfessorComment";
+import FullScreenMode from "./FullScreenMode";
 
 export default function BarrierReviewApp() {
   const [showLanding, setShowLanding] = useState(true);
@@ -93,16 +94,20 @@ export default function BarrierReviewApp() {
 
   if (showLanding) {
     return (
-      <LandingPage onEnter={() => {
+      <>
+        <FullScreenMode />
+        <LandingPage onEnter={() => {
         soundService.playClick();
         setShowLanding(false);
         setIsMenuOpen(true);
       }} />
+      </>
     );
   }
 
   return (
-    <div className="bg-black text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+    <div className="flex-1 bg-black text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+      <FullScreenMode />
       <SideMenu
         data={PERCUSSION_DATA}
         selectedLevel={selectedLevel}

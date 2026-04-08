@@ -8,7 +8,7 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
   return (
-    <div className="bg-black text-slate-100 flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans min-h-[80vh]">
+    <div className="flex-1 bg-black text-slate-100 flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900 via-black to-black opacity-80 z-0" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px] opacity-20 z-0 pointer-events-none" />
 
