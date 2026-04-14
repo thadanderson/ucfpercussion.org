@@ -8,7 +8,6 @@ address:
   - Orlando, FL 32816-1354
 maps_url: https://goo.gl/maps/gVqeHKfnZRXzcDTH6
 ---
-
 ## How to Get Here
 
 The Performing Arts Center (PAC) is located on UCF's main campus. The Music offices are in the south building (PAC M203), with reception on the second floor near the interior staircase. Staff are available Monday – Friday, 8:00 AM – 5:00 PM.

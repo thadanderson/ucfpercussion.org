@@ -2,7 +2,6 @@
 title: Audition Information
 subtitle: Join the UCF Percussion Studio
 ---
-
 ## Requirements
 
 Prospective students should prepare a diverse audition that demonstrates technical facility and musicianship across the major instrument families. The following are general expectations:
