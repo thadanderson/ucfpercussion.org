@@ -1,8 +1,13 @@
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Dashboard" };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isAdmin = user?.app_metadata?.role === "admin";
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
       <h1 className="text-4xl font-bold text-ucf-white mb-10">Studio Dashboard</h1>
@@ -59,6 +64,28 @@ export default function DashboardPage() {
           </svg>
         </Link>
       </div>
+
+      {isAdmin && (
+        <div className="mt-12 border-t border-neutral-800 pt-8">
+          <p className="text-xs text-neutral-600 font-bold uppercase tracking-widest mb-4">Administration</p>
+          <Link
+            href="/admin"
+            className="group flex items-center justify-between bg-neutral-900/50 border border-neutral-800 hover:border-ucf-gold/60 rounded-sm px-8 py-5 transition-colors"
+          >
+            <div>
+              <h2 className="text-base font-bold text-neutral-400 group-hover:text-ucf-gold transition-colors mb-0.5">
+                Admin Dashboard
+              </h2>
+              <p className="text-xs text-neutral-600 leading-relaxed">
+                Manage events, faculty, assessments, library, and site content.
+              </p>
+            </div>
+            <svg className="w-4 h-4 text-neutral-700 group-hover:text-ucf-gold transition-colors shrink-0 ml-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
