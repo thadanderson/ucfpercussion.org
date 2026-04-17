@@ -9,6 +9,7 @@ const links = [
   { href: "/admin/faculty", label: "Faculty" },
   { href: "/admin/library", label: "Library" },
   { href: "/admin/alumni", label: "Alumni" },
+  { href: "/admin/assessments", label: "Assessments" },
   { href: "/admin/students", label: "Students" },
   { href: "/admin/content", label: "Content" },
 ];

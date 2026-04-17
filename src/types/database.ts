@@ -219,6 +219,82 @@ export interface Database {
         Relationships: [];
       };
 
+      assessments: {
+        Row: {
+          id: string;
+          created_at: string;
+          created_by: string | null;
+          semester: string;
+          student_name: string;
+          performance_level: string | null;
+          degree_program: string | null;
+          notes: string | null;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          created_by?: string | null;
+          semester?: string;
+          student_name: string;
+          performance_level?: string | null;
+          degree_program?: string | null;
+          notes?: string | null;
+        };
+        Update: Partial<Omit<Database["public"]["Tables"]["assessments"]["Insert"], "id">>;
+        Relationships: [];
+      };
+
+      assessment_scores: {
+        Row: {
+          id: string;
+          assessment_id: string;
+          faculty: string;
+          exam_type: string;
+          submitted_at: string | null;
+          submitted_by: string | null;
+          s_technique: number | null;
+          s_hand_limb_position: number | null;
+          s_posture: number | null;
+          s_physical_motion: number | null;
+          s_rolling_sustain: number | null;
+          p_tone_intonation: number | null;
+          p_touch: number | null;
+          p_sense_of_pulse: number | null;
+          p_rhythmic_pitch_accuracy: number | null;
+          p_overall_sound_concept: number | null;
+          m_expression: number | null;
+          m_interpretation: number | null;
+          m_creativity: number | null;
+          m_communication: number | null;
+          m_reading: number | null;
+        };
+        Insert: {
+          id?: string;
+          assessment_id: string;
+          faculty: string;
+          exam_type: string;
+          submitted_at?: string | null;
+          submitted_by?: string | null;
+          s_technique?: number | null;
+          s_hand_limb_position?: number | null;
+          s_posture?: number | null;
+          s_physical_motion?: number | null;
+          s_rolling_sustain?: number | null;
+          p_tone_intonation?: number | null;
+          p_touch?: number | null;
+          p_sense_of_pulse?: number | null;
+          p_rhythmic_pitch_accuracy?: number | null;
+          p_overall_sound_concept?: number | null;
+          m_expression?: number | null;
+          m_interpretation?: number | null;
+          m_creativity?: number | null;
+          m_communication?: number | null;
+          m_reading?: number | null;
+        };
+        Update: Partial<Omit<Database["public"]["Tables"]["assessment_scores"]["Insert"], "id">>;
+        Relationships: [];
+      };
+
       music_library: {
         Row: {
           id: string;
