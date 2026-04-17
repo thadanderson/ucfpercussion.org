@@ -110,23 +110,28 @@ const DrawSelector: React.FC<DrawSelectorProps> = ({ items, onSpinEnd, hideResul
           <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black via-black/80 to-transparent z-10 pointer-events-none" />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/80 to-transparent z-10 pointer-events-none" />
 
-          {/* Drawing Mode sealed overlay — covers wheel immediately on spin start */}
-          {hideResult && (isSpinning || winningIndex !== null) && (
-            <div className="absolute inset-0 z-20 bg-neutral-900/95 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
-              {isSpinning ? (
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-neutral-600 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <div className="w-2 h-2 bg-neutral-600 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <div className="w-2 h-2 bg-neutral-600 rounded-full animate-bounce" />
+          {/* Drawing Mode overlay — hazy while spinning, sealed when stopped */}
+          {hideResult && isSpinning && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 pointer-events-none"
+              style={{ backdropFilter: "blur(12px) brightness(0.45)" }}>
+              {/* Animated pulse ring */}
+              <div className="relative flex items-center justify-center">
+                <div className="absolute w-16 h-16 rounded-full border-2 border-ucf-gold/40 animate-ping" />
+                <div className="w-10 h-10 rounded-full border-2 border-ucf-gold/60 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-ucf-gold/80 animate-pulse" />
                 </div>
-              ) : (
-                <>
-                  <svg className="w-10 h-10 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <p className="text-neutral-500 text-xs font-bold uppercase tracking-widest">Result Sealed</p>
-                </>
-              )}
+              </div>
+              <p className="text-ucf-gold/60 text-[10px] font-black uppercase tracking-[0.25em] animate-pulse">
+                Drawing…
+              </p>
+            </div>
+          )}
+          {hideResult && !isSpinning && winningIndex !== null && (
+            <div className="absolute inset-0 z-20 bg-neutral-900/96 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
+              <svg className="w-10 h-10 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <p className="text-neutral-500 text-xs font-bold uppercase tracking-widest">Result Sealed</p>
             </div>
           )}
           {items.length > 0 && (
