@@ -62,6 +62,7 @@ const Controls: React.FC<ControlsProps> = ({
                 {isBackingTrack && (
                   <select value={currentProgressionId} onChange={e => onProgressionSelect(e.target.value)}
                     disabled={progressionLoading}
+                    style={{ colorScheme: 'dark' }}
                     className="w-full bg-neutral-800 text-white text-xs font-medium rounded-md border border-neutral-600 p-2 focus:ring-1 focus:ring-ucf-gold appearance-none disabled:opacity-50">
                     {availableProgressions.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                   </select>
@@ -102,6 +103,7 @@ const Controls: React.FC<ControlsProps> = ({
               <div className="flex-1 flex flex-col justify-end pb-0.5">
                 <div className="flex">
                   <select value={currentPhraseIndex} onChange={(e) => onPhraseSelect(parseInt(e.target.value))}
+                    style={{ colorScheme: 'dark' }}
                     className="flex-1 bg-neutral-800 text-white text-xs font-medium rounded-l-md border border-neutral-600 focus:ring-1 focus:ring-ucf-gold block w-full p-2 appearance-none truncate">
                     {currentSubCategory.phrases.map((p, idx) => (
                       <option key={p.id} value={idx}>{idx + 1}. {p.name}</option>

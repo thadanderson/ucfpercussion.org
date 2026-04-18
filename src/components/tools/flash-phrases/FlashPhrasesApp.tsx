@@ -352,7 +352,7 @@ export default function FlashPhrasesApp() {
                 <div className="flex flex-col justify-center bg-neutral-800/80 backdrop-blur-md border border-neutral-700 rounded-lg px-2 py-1 shadow-lg">
                   <label className="text-[8px] text-neutral-500 font-bold uppercase text-center mb-0.5">Count-in</label>
                   <select value={countInBars} onChange={(e) => handleSetCountIn(parseInt(e.target.value))}
-                    className="bg-transparent text-ucf-gold font-bold text-xs focus:outline-none cursor-pointer text-center appearance-none">
+                    style={{ colorScheme: 'dark' }} className="bg-transparent text-ucf-gold font-bold text-xs focus:outline-none cursor-pointer text-center appearance-none">
                     <option value={1}>1 Bar</option>
                     <option value={2}>2 Bars</option>
                     <option value={4}>4 Bars</option>
