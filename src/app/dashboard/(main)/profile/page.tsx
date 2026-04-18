@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { updateOwnProfile } from "@/app/dashboard/profile/actions";
+import { updateOwnProfile } from "@/app/dashboard/(main)/profile/actions";
 import type { Database } from "@/types/database";
 
 type AlumnusRow = Database["public"]["Tables"]["alumni"]["Row"];

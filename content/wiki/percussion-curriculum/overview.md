@@ -14,7 +14,6 @@ The percussion studies program at UCF offers majors comprehensive instruction in
 5. Drumset, Hand Drumming, and World Music
 
 ---
-
 ### Snare Drum & Multiple Percussion Proficiency
 
 | **Deficient**                                               | **Level 1**                                                 | **Level 2**                                                        |
@@ -35,7 +34,6 @@ The percussion studies program at UCF offers majors comprehensive instruction in
 6. _Odd Meter Rudimental Etudes_ by Mitchell Peters
 
 ---
-
 ### Timpani and Orchestral Percussion Proficiency
 
 | **Deficient**                     | **Level 1**                                             | **Level 2**                                             | **Level 3**                                                     |
@@ -53,7 +51,6 @@ The percussion studies program at UCF offers majors comprehensive instruction in
 5. _The Complete Timpani Method_ by Al Lepak/Alexander Friese
 
 ---
-
 ### Keyboard Percussion Proficiency
 
 | **Deficient**                                      | **Level 1**                                                                     | **Level 2**                                                      | **Level 3**                                              | **Level 4**                                                      |
@@ -77,7 +74,6 @@ The percussion studies program at UCF offers majors comprehensive instruction in
 8. _Contemporary Etudes_ by Karen Erving
 
 ---
-
 ### Jazz Comping and Improvisation Proficiency
 
 | **Level 1**                                                     | **Level 2**                                                  |
@@ -89,7 +85,6 @@ The percussion studies program at UCF offers majors comprehensive instruction in
 | Jury Piece                                                      | Jury Piece                                                   |
 
 ---
-
 ### Drum Set & World Music
 
 | **Deficient**                                           | **Level 1**                                             | **Level 2**                                                                | **Level 3**                                                                     | **Level 4**                                                                |
