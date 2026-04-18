@@ -5,8 +5,8 @@
 A web application for the UCF Percussion Studio (University of Central Florida). It serves three audiences:
 
 - **Public visitors** — event listings, faculty bios, alumni directory, audition info, about/contact pages
-- **Students & faculty** — authenticated dashboard for viewing lesson schedules, jury dates, and the music library
-- **Admins** — full CRUD for events, faculty, alumni, and the Percussion Music Library (PML); read-only student roster
+- **Students & faculty** — authenticated dashboard for studio tools, wiki, and music library
+- **Admins** — full CRUD for events, faculty, alumni, and the Percussion Music Library (PML); assessment tools; read-only student roster
 
 ## Tech Stack
 
@@ -18,6 +18,7 @@ A web application for the UCF Percussion Studio (University of Central Florida).
 | Backend | Supabase (Postgres + Auth + RLS) |
 | Auth client | `@supabase/ssr` 0.8.0 |
 | React | 19.2.3 |
+| Markdown | `gray-matter` (frontmatter) + `marked` (HTML rendering) |
 
 ## UCF Brand Colors
 
@@ -34,6 +35,14 @@ Use as Tailwind utilities: `bg-ucf-gold`, `text-ucf-gold`, `text-ucf-black`, `te
 ## Project Structure
 
 ```
+content/
+└── wiki/                      # Markdown wiki pages (edited in Obsidian)
+    ├── current-semester/
+    ├── studio-policies/
+    ├── percussion-curriculum/
+    ├── degree-recitals/
+    └── resources/
+
 src/
 ├── app/
 │   ├── (auth)/login/          # Login page + signIn/signOut server actions
@@ -59,42 +68,77 @@ src/
 │   │   ├── alumni/            # CRUD: list, new, [id]/edit, actions.ts
 │   │   ├── library/           # CRUD: list, new, [id]/edit, actions.ts
 │   │   ├── students/          # Read-only table (create via Supabase dashboard)
-│   │   └── content/           # Coming soon placeholder
+│   │   ├── content/           # Coming soon placeholder
+│   │   └── assessments/
+│   │       ├── page.tsx       # Hub landing page — tool cards (PPAR, Ensemble Audition coming soon)
+│   │       └── rubric/        # Percussion Performance Assessment Rubric (PPAR)
+│   │           ├── page.tsx           # Assessment list
+│   │           ├── actions.ts         # saveScores, deleteAssessment server actions
+│   │           ├── new/page.tsx       # Create new assessment
+│   │           ├── export/route.ts    # GET → anonymous CSV export
+│   │           └── [id]/
+│   │               ├── page.tsx       # Results / PAR summary view
+│   │               └── score/page.tsx # Faculty score entry page
 │   ├── auth/callback/         # OAuth code exchange route
-│   └── dashboard/             # Authenticated user dashboard (placeholder pages)
-│       ├── page.tsx
+│   └── dashboard/             # Authenticated user dashboard
+│       ├── page.tsx           # Studio Dashboard — tool cards + admin link for admins
 │       ├── profile/           # Alumni self-manage current_role, bio, etc.
 │       ├── schedule/
 │       ├── library/
-│       └── juries/
+│       ├── juries/
+│       ├── barrier-review/    # Barrier Review & Drawing tool
+│       ├── flash-phrases/     # Flash Phrases coordination training tool
+│       └── wiki/
+│           ├── layout.tsx     # WikiSidebar + content shell
+│           └── [[...slug]]/   # Catch-all: renders any content/wiki/**/*.md page
+│               └── page.tsx
 ├── components/
 │   ├── admin/
 │   │   ├── AdminNav.tsx       # "use client" — usePathname active-link sidebar
 │   │   ├── DeleteButton.tsx   # "use client" — window.confirm before submit
 │   │   ├── ImageUpload.tsx    # "use client" — Supabase Storage upload, returns public URL
-│   │   └── RichTextEditor.tsx # "use client" — Tiptap editor (bold, italic, lists, links)
+│   │   ├── RichTextEditor.tsx # "use client" — Tiptap editor (bold, italic, lists, links)
+│   │   └── assessments/
+│   │       ├── ScoreForm.tsx            # "use client" — faculty/exam tabs, sliders, copy-from feature
+│   │       └── DeleteAssessmentButton.tsx # "use client" — useTransition + confirm dialog
 │   ├── auth/
 │   │   └── LogoutButton.tsx   # "use client" — wraps signOut server action
 │   ├── layout/
 │   │   ├── Navbar.tsx         # async server component — passes isLoggedIn to NavMenu
 │   │   ├── NavMenu.tsx        # "use client" — hamburger toggle, desktop + mobile nav
 │   │   └── Footer.tsx
+│   ├── tools/
+│   │   └── barrier-review/    # Barrier Review & Drawing tool components
+│   │       ├── BarrierReviewApp.tsx   # Main app shell, mode switching
+│   │       ├── DrawSelector.tsx       # Slot-machine roulette wheel with Drawing Mode overlay
+│   │       ├── LandingPage.tsx        # Mode selection (Barrier Review / Drawing)
+│   │       ├── SideMenu.tsx           # Level/item configuration panel
+│   │       ├── FilterMenu.tsx         # Filter controls
+│   │       ├── ProfessorComment.tsx   # AI etude advice panel
+│   │       ├── soundService.ts        # Tick/click sound effects
+│   │       ├── constants.ts           # All levels of study and their items
+│   │       └── types.ts               # RouletteItem and related types
+│   ├── wiki/
+│   │   └── WikiSidebar.tsx    # "use client" — collapsible sidebar, section headers + page links
 │   └── ui/
 │       ├── EventCard.tsx      # Typed from events Row; renders HTML descriptions + poster image
 │       ├── FacultyCard.tsx    # "use client" — expandable bio, paragraph rendering
 │       ├── NewsletterSubscribe.tsx  # "use client" — Buttondown subscribe form
 │       └── PostCard.tsx       # Typed from posts Row
-├── lib/supabase/
-│   ├── client.ts              # createBrowserClient<Database>
-│   └── server.ts              # async createServerClient<Database> (awaits cookies())
+├── lib/
+│   ├── assessment.ts          # Shared PPAR constants, score types, PAR/grade computation
+│   ├── wiki.ts                # Reads content/wiki/ filesystem, builds nav tree, renders markdown
+│   └── supabase/
+│       ├── client.ts          # createBrowserClient<Database>
+│       └── server.ts          # async createServerClient<Database> (awaits cookies())
 ├── proxy.ts                   # Session-refresh proxy — NOT middleware.ts
 └── types/
     └── database.ts            # Hand-written DB types (replace with supabase gen types later)
 ```
 
-## Database Schema (9 tables)
+## Database Schema (11 tables)
 
-All tables live in `supabase/schema.sql`. Run it once in the Supabase SQL Editor.
+All tables live in `supabase/schema.sql`. Assessment tables are in `supabase/assessments_migration.sql`.
 
 | Table | Purpose | Key fields |
 |-------|---------|-----------|
@@ -107,6 +151,8 @@ All tables live in `supabase/schema.sql`. Run it once in the Supabase SQL Editor
 | `posts` | News/blog posts | `slug` (UNIQUE), `published`, `published_at`, `author_id` |
 | `music_library` | Percussion Music Library | `composer`, `arranger`, `instrumentation`, `location` |
 | `alumni` | Alumni directory | `user_id` (optional FK), `degree`, `graduation_year`, `published` |
+| `assessments` | PPAR assessment records | `semester`, `student_name`, `performance_level`, `degree_program`, `notes` |
+| `assessment_scores` | Per-faculty scores for each assessment | `assessment_id` (FK, CASCADE), `faculty` (anderson/gay/moore), `exam_type` (barrier/jury), 15 numeric score columns, UNIQUE(assessment_id, faculty, exam_type) |
 
 ### RLS pattern
 
@@ -118,6 +164,16 @@ All tables live in `supabase/schema.sql`. Run it once in the Supabase SQL Editor
 
 `users.id` has no `gen_random_uuid()` default — the admin must insert the UUID that Supabase Auth assigns when creating the user.
 
+### Supabase nested select limitation
+
+Supabase TypeScript client cannot infer joins (e.g. `select("*, assessment_scores(*)")`) without `Relationships` entries in `database.ts`. When `Relationships: []` is used (required — see below), query both tables separately and join in JavaScript:
+
+```typescript
+const { data: assessments } = await supabase.from("assessments").select("*");
+const { data: scores } = await supabase.from("assessment_scores").select("*");
+// Join manually: scores.filter(s => s.assessment_id === a.id)
+```
+
 ## Authentication
 
 - Sign-in: email + password via `supabase.auth.signInWithPassword()`
@@ -125,6 +181,16 @@ All tables live in `supabase/schema.sql`. Run it once in the Supabase SQL Editor
 - `proxy.ts` guards `/dashboard/*` (any authenticated) and `/admin/*` (role = 'admin')
 - `redirect()` throws internally — **never wrap in try/catch**
 - `cookies()` returns a Promise in Next.js 15+ — server client factory is `async`
+
+### Checking role in server components
+
+```typescript
+const supabase = await createClient();
+const { data: { user } } = await supabase.auth.getUser();
+const isAdmin = user?.app_metadata?.role === "admin";
+```
+
+Used in `dashboard/page.tsx` to conditionally render the Admin Dashboard link.
 
 ## Key Conventions
 
@@ -136,6 +202,16 @@ All tables live in `supabase/schema.sql`. Run it once in the Supabase SQL Editor
 // On success: redirect("/path")
 // redirect() is NEVER inside a try/catch
 ```
+
+### Calling server actions from client components
+Use `useTransition` — never call async server actions directly in event handlers:
+```typescript
+const [isPending, startTransition] = useTransition();
+function handleClick() {
+  startTransition(() => myServerAction(id));
+}
+```
+Never add `onClick` to a server component — extract a `"use client"` wrapper component.
 
 ### Next.js 15+ async props
 ```typescript
@@ -194,6 +270,38 @@ Events have a `pinned boolean DEFAULT false` column. The homepage shows pinned u
 ### Dark mode / color scheme
 The site is locked to dark mode. `globals.css` sets `color-scheme: dark` on `:root` so the browser never flips to a light theme regardless of the visitor's system preference. All page backgrounds and text colors are set explicitly via UCF brand utilities (`bg-ucf-black`, `text-ucf-white`, etc.).
 
+**Exception:** Admin pages and the Studio Wiki use a light (`bg-white` / `bg-gray-50`) content area inside the dark sidebar layout. The `.wiki-body` CSS class in `globals.css` applies dark text and blue links for wiki content rendered on a light background.
+
+## Studio Wiki
+
+- **Content location:** `content/wiki/` at the project root (not inside `src/`) — edited in Obsidian
+- **Structure:** Top-level directories = sections; `.md` files inside = pages. Frontmatter fields: `title`, `order` (integer, controls sort order within section)
+- **Library:** `src/lib/wiki.ts` reads the filesystem with `fs.readdirSync` + `process.cwd()`, parses frontmatter with `gray-matter`, renders markdown to HTML with `marked`
+- **Route:** `src/app/dashboard/wiki/[[...slug]]/page.tsx` — catch-all handles any depth
+- **Sidebar:** `src/components/wiki/WikiSidebar.tsx` — "use client", collapsible (open: `w-80`, closed: `w-12` icon-only strip), section headers are non-clickable labels, pages are indented links
+- **Sections (in order):** Current Semester, Studio Policies, Percussion Curriculum, Degree Recitals, Resources
+
+## Barrier Review & Drawing Tool
+
+- **Route:** `/dashboard/barrier-review`
+- **Components:** `src/components/tools/barrier-review/`
+- **Modes:** Barrier Review (study reference) and Drawing (random item selector)
+- **Drawing Mode overlay:** While spinning, a `backdrop-filter: blur(12px) brightness(0.45)` overlay lets motion bleed through without revealing text. A pulsing gold ring + "Drawing…" label float over it. Once the spin stops, a solid sealed overlay with a lock icon appears until the instructor clicks Reveal.
+- **Levels of study defined in `constants.ts`:** Snare (Rudimental 1–3, Concert 1–3), Marimba (1–3), Timpani (Deficient, 1–2), Vibe (1–2), Keyboard (1–3), Multi-Perc (1–2), Drum Set (1–3)
+- **AI etude advice:** `/api/etude-advice` route handler; uses `ProfessorComment` component
+
+## Percussion Performance Assessment Rubric (PPAR)
+
+- **Admin route:** `/admin/assessments/rubric/`
+- **Hub:** `/admin/assessments/` — landing page with tool cards; add future tools (e.g. Ensemble Audition) here
+- **Shared constants/utils:** `src/lib/assessment.ts` — `FACULTY`, `EXAM_TYPES`, `CRITERIA` (15 scored items across technique/performance/musicianship sections), `computePAR()`, `computeLetterGrade()`
+- **Scoring:** Three faculty (Anderson, Gay, Moore) each score independently (asynchronously) on two exam types (Technical Barrier, Performance Jury). Scores are upserted on `(assessment_id, faculty, exam_type)` so re-saves are safe.
+- **Score inputs:** Sliders (`type="range"`, step 0.1, `accentColor: "#FFC904"`) paired with a number readout. Range: 0–10 per criterion; section total /50; grand total /150.
+- **Copy-from feature:** When a faculty member is absent, their scores can be copied from another faculty member who has already submitted for the same exam type. An amber banner appears automatically in `ScoreForm.tsx` with per-faculty copy buttons. Scores load into the form but are not saved until the user clicks Save.
+- **PAR computation:** Purely derived at render time from jury section totals — not stored. `computePAR(sectionTotal)` returns 0 (Does Not Meet, <37.5), 1 (Meets, 37.5–44.9), or 2 (Exceeds, ≥45).
+- **CSV export:** `GET /admin/assessments/rubric/export?faculty=anderson&semester=Spring+2026` — anonymous (no student name), filterable by faculty and semester. `faculty=average` exports averaged scores across all three faculty.
+- **Score columns (15):** `s_technique`, `s_hand_limb_position`, `s_posture`, `s_physical_motion`, `s_rolling_sustain`, `p_tone_intonation`, `p_touch`, `p_sense_of_pulse`, `p_rhythmic_pitch_accuracy`, `p_overall_sound_concept`, `m_expression`, `m_interpretation`, `m_creativity`, `m_communication`, `m_reading`
+
 ## Deployment
 
 - **Platform:** Vercel (connected to GitHub `main` branch — auto-deploys on push)
@@ -217,7 +325,7 @@ npm run build    # production build + TypeScript check
 npm run lint     # ESLint
 ```
 
-Build must pass with **zero TypeScript errors**. Current route count: **35 routes**.
+Build must pass with **zero TypeScript errors**. Current route count: ~40 routes.
 
 ## Step Progress
 
@@ -232,4 +340,8 @@ Build must pass with **zero TypeScript errors**. Current route count: **35 route
 | 4.7 | Deployed to Vercel with custom domain | ✅ Complete |
 | 4.8 | Audition page content update, dark mode locked site-wide | ✅ Complete |
 | 4.9 | Event detail pages, compact horizontal event cards, pinned events on homepage | ✅ Complete |
+| 4.10 | Studio Wiki: filesystem markdown, collapsible sidebar, Notion-style layout | ✅ Complete |
+| 4.11 | Barrier Review & Drawing tool: slot-machine wheel, Drawing Mode sealed/hazy overlay, AI etude advice | ✅ Complete |
+| 4.12 | Flash Phrases coordination training tool | ✅ Complete |
+| 4.13 | Percussion Performance Assessment Rubric (PPAR): async faculty scoring, sliders, PAR/grade, CSV export, copy-from feature, assessments hub | ✅ Complete |
 | 5 | Student/faculty dashboard + admin lesson/jury scheduling | Pending |
