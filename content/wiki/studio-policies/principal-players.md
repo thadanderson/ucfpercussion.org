@@ -29,7 +29,7 @@ Large ensemble concerts typically come with the demand of a large amount of perc
 Set up diagrams can be made on a tablet, computer, or just with paper and pen. Once you have made it, send it to your Microsoft Teams group chat. Having a set up diagram helps with efficiency when setting up for rehearsals so everyone knows where everything goes.
 
 Here is an example of what a set up diagram may look like:
-![Large Ensemble Setup Diagram](/wiki-images/Sample Large Ensemble Setup Diagram.png)
+![Large Ensemble Setup Diagram](/wiki-images/sample-large-ensemble-setup-diagram.png)
 ### Load Lists and Concerts
 **AT LEAST ONE WEEK BEFORE A CONCERT OR PERFORMANCE,** it is your responsibility to get with your section to make a load list of the equipment and implements needed for a performance. This can either be done in person or via your Teams group chat. You will then organize it into the Load List Template that can be found here:
 
