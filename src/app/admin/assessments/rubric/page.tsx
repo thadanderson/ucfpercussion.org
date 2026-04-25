@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { FACULTY, FACULTY_LABELS, EXAM_LABELS, type Faculty, type ExamType } from "@/lib/assessment";
+import ExportForm from "@/components/admin/assessments/ExportForm";
 
 export const metadata = { title: "Percussion Performance Assessment Rubric" };
 
@@ -20,6 +21,9 @@ export default async function AssessmentsPage({
   const { data: allScores } = await supabase
     .from("assessment_scores")
     .select("assessment_id, faculty, exam_type");
+
+  // Distinct semesters for the export filter dropdown
+  const semesters = [...new Set((assessments ?? []).map((a) => a.semester).filter(Boolean))] as string[];
 
   // Build a quick lookup: assessmentId → Set of "faculty-examType" that are submitted
   function submittedKey(faculty: string, examType: string) {
@@ -55,30 +59,7 @@ export default async function AssessmentsPage({
         </p>
       )}
 
-      {/* Export section */}
-      <div className="mb-8 p-4 bg-white border border-gray-200 rounded">
-        <p className="text-sm font-semibold text-gray-700 mb-3">Export PAR Data (anonymous, by faculty)</p>
-        <div className="flex flex-wrap gap-2">
-          {FACULTY.map((f) => (
-            <a
-              key={f}
-              href={`/admin/assessments/rubric/export?faculty=${f}`}
-              className="text-xs font-semibold uppercase tracking-wide bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded transition-colors"
-            >
-              ↓ {FACULTY_LABELS[f]} PAR
-            </a>
-          ))}
-          <a
-            href="/admin/assessments/rubric/export?faculty=average"
-            className="text-xs font-semibold uppercase tracking-wide bg-ucf-gold hover:bg-yellow-400 text-ucf-black px-3 py-2 rounded transition-colors"
-          >
-            ↓ Average PAR
-          </a>
-        </div>
-        <p className="text-xs text-gray-400 mt-2">
-          Add <code>?semester=Spring+2026</code> to filter by semester (all semesters exported by default).
-        </p>
-      </div>
+      <ExportForm semesters={semesters} />
 
       {/* Assessment list */}
       {!assessments || assessments.length === 0 ? (
