@@ -266,16 +266,21 @@ export default function ScoreForm({ assessmentId, studentName, existingScores }:
         <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 select-none">
           Grading scale reference
         </summary>
-        <div className="mt-3 text-xs text-gray-500 grid grid-cols-3 gap-x-8 gap-y-1 max-w-sm">
+        <div className="mt-3 border border-gray-200 rounded overflow-hidden max-w-xs">
           {[
-            ["A", "141–150"], ["A−", "135–140"], ["B+", "130–134"],
-            ["B", "126–129"], ["B−", "120–125"], ["C+", "115–119"],
-            ["C", "111–114"], ["C−", "105–110"], ["D+", "100–104"],
-            ["D", "96–99"],   ["D−", "90–95"],   ["F", "0–89"],
-          ].map(([grade, range]) => (
-            <div key={grade} className="flex justify-between">
-              <span className="font-semibold">{grade}</span>
-              <span>{range}</span>
+            ["A",  "141–150"], ["A−", "135–140"], ["B+", "130–134"],
+            ["B",  "126–129"], ["B−", "120–125"], ["C+", "115–119"],
+            ["C",  "111–114"], ["C−", "105–110"], ["D+", "100–104"],
+            ["D",  "96–99"],   ["D−", "90–95"],   ["F",  "0–89"],
+          ].map(([grade, range], i) => (
+            <div
+              key={grade}
+              className={`flex items-center justify-between px-4 py-2 text-sm ${
+                i % 2 === 0 ? "bg-white" : "bg-gray-50"
+              }`}
+            >
+              <span className="font-bold text-gray-800 w-8">{grade}</span>
+              <span className="text-gray-500">{range}</span>
             </div>
           ))}
         </div>
