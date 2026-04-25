@@ -59,8 +59,6 @@ export default async function AssessmentsPage({
         </p>
       )}
 
-      <ExportForm semesters={semesters} />
-
       {/* Assessment list */}
       {!assessments || assessments.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
@@ -134,6 +132,10 @@ export default async function AssessmentsPage({
           </table>
         </div>
       )}
+
+      <div className="mt-8">
+        <ExportForm semesters={semesters} />
+      </div>
     </div>
   );
 }
