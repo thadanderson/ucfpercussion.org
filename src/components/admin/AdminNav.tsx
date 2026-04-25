@@ -4,11 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/admin", label: "Overview" },
   { href: "/admin/events", label: "News & Events" },
+  { href: "/admin/assessments", label: "Assessments" },
   { href: "/admin/faculty", label: "Faculty" },
   { href: "/admin/alumni", label: "Alumni" },
-  { href: "/admin/assessments", label: "Assessments" },
 ];
 
 export default function AdminNav() {
