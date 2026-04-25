@@ -7,11 +7,8 @@ const links = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/events", label: "News & Events" },
   { href: "/admin/faculty", label: "Faculty" },
-  { href: "/admin/library", label: "Library" },
   { href: "/admin/alumni", label: "Alumni" },
   { href: "/admin/assessments", label: "Assessments" },
-  { href: "/admin/students", label: "Students" },
-  { href: "/admin/content", label: "Content" },
 ];
 
 export default function AdminNav() {
